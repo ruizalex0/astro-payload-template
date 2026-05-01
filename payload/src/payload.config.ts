@@ -6,6 +6,9 @@ import { fileURLToPath } from 'url'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
+import { Navlinks } from './collections/Navlinks'
+import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,7 +23,7 @@ export default buildConfig({
             baseDir: path.resolve(dirname),
         },
     },
-    collections: [Users, Media],
+    collections: [Users, Media, Pages, Navlinks],
     editor: lexicalEditor(),
     secret: process.env.PAYLOAD_SECRET || '',
     typescript: {
@@ -29,5 +32,12 @@ export default buildConfig({
     db: mongooseAdapter({
         url: process.env.DATABASE_URL || '',
     }),
-    plugins: [],
+    plugins: [
+        nestedDocsPlugin({
+            collections: ['pages'],
+            generateLabel: (_, doc) => String(doc.title),
+            generateURL: (docs) =>
+                docs.reduce((url, doc) => `${url}/${String(doc.slug)}`, ''),
+        }),
+    ],
 })

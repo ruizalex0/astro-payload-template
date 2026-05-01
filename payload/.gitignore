@@ -41,7 +41,8 @@ next-env.d.ts
 
 .env
 
-/media
+# File assets uploaded by user
+/assets
 
 # Playwright
 node_modules/

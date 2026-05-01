@@ -69,6 +69,8 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    pages: Page;
+    navlink: Navlink;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +80,8 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    navlink: NavlinkSelect<false> | NavlinkSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -163,6 +167,77 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: string;
+  title?: string | null;
+  slug?: string | null;
+  content?:
+    | (
+        | {
+            images?:
+              | {
+                  media?: (string | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageColumn';
+          }
+        | {
+            columns?:
+              | {
+                  images?:
+                    | {
+                        media?: (string | null) | Media;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'imageColumn';
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'grid';
+          }
+      )[]
+    | null;
+  parent?: (string | null) | Page;
+  breadcrumbs?:
+    | {
+        doc?: (string | null) | Page;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navlink".
+ */
+export interface Navlink {
+  id: string;
+  title: string;
+  page: string | Page;
+  sublinks?:
+    | {
+        title: string;
+        page: string | Page;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -192,6 +267,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'navlink';
+        value: string | Navlink;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -274,6 +357,80 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  content?:
+    | T
+    | {
+        imageColumn?:
+          | T
+          | {
+              images?:
+                | T
+                | {
+                    media?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        grid?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    imageColumn?:
+                      | T
+                      | {
+                          images?:
+                            | T
+                            | {
+                                media?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navlink_select".
+ */
+export interface NavlinkSelect<T extends boolean = true> {
+  title?: T;
+  page?: T;
+  sublinks?:
+    | T
+    | {
+        title?: T;
+        page?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
