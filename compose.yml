@@ -2,7 +2,7 @@ services:
   payload:
     image: node:24-alpine
     ports:
-      - '3001:3000'
+      - '3000:3000'
     volumes:
       - payload_build:/home/node/app/.next
       - ./payload:/home/node/app
@@ -20,6 +20,16 @@ services:
     restart: always
     volumes:
       - ./mongo-data:/data/db
+  astro:
+    image: node:24-alpine
+    ports:
+      - '4321:4321'
+    volumes:
+      - ./astro:/home/node/app
+      - astro_modules:/home/node/app/node_modules
+    working_dir: /home/node/app/
+    command: sh -c "npm install && npm run dev -- --host"
 volumes:
+  astro_modules:
   payload_modules:
   payload_build:

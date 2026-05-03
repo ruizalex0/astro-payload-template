@@ -1,0 +1,36 @@
+---
+export const prerender = false
+import type { GetStaticPaths } from 'astro'
+
+export const getStaticPaths = (async () => {
+    console.log('HI I RAN')
+    const response = await fetch(
+        'http://payload:3000/api/pages?depth=0&draft=false&trash=false'
+    )
+    const data = await response.json()
+    const pages = data.docs.map((page: any) => {
+        return {
+            params: { slug: page.url },
+            props: {
+                title: page.title as string,
+                content: page.content as any,
+            },
+        }
+    })
+    return pages
+}) satisfies GetStaticPaths
+
+const { title } = Astro.props
+---
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+    </head>
+    <body>
+        <h1>{title}</h1>
+        <p>{title}</p>
+    </body>
+</html>
