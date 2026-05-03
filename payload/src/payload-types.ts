@@ -105,20 +105,18 @@ export interface Config {
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string;
-    password: string;
+    username: string;
   };
   login: {
-    email: string;
     password: string;
+    username: string;
   };
   registerFirstUser: {
-    email: string;
     password: string;
+    username: string;
   };
   unlock: {
-    email: string;
-    password: string;
+    username: string;
   };
 }
 /**
@@ -129,7 +127,8 @@ export interface User {
   id: string;
   updatedAt: string;
   createdAt: string;
-  email: string;
+  email?: string | null;
+  username: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
   salt?: string | null;
@@ -171,8 +170,8 @@ export interface Media {
  */
 export interface Page {
   id: string;
-  title?: string | null;
-  slug?: string | null;
+  title: string;
+  slug: string;
   content?:
     | (
         | {
@@ -206,7 +205,7 @@ export interface Page {
           }
       )[]
     | null;
-  parent?: (string | null) | Page;
+  url?: string | null;
   breadcrumbs?:
     | {
         doc?: (string | null) | Page;
@@ -215,6 +214,7 @@ export interface Page {
         id?: string | null;
       }[]
     | null;
+  parent?: (string | null) | Page;
   updatedAt: string;
   createdAt: string;
 }
@@ -326,6 +326,7 @@ export interface UsersSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   email?: T;
+  username?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
   salt?: T;
@@ -403,7 +404,7 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  parent?: T;
+  url?: T;
   breadcrumbs?:
     | T
     | {
@@ -412,6 +413,7 @@ export interface PagesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  parent?: T;
   updatedAt?: T;
   createdAt?: T;
 }

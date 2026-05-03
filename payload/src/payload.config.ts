@@ -22,6 +22,14 @@ export default buildConfig({
         importMap: {
             baseDir: path.resolve(dirname),
         },
+        autoLogin:
+            process.env.NODE_ENV === 'development'
+                ? {
+                      username: 'admin',
+                      password: 'admin',
+                  }
+                : false,
+        autoRefresh: true,
     },
     collections: [Users, Media, Pages, Navlinks],
     editor: lexicalEditor(),
@@ -32,6 +40,15 @@ export default buildConfig({
     db: mongooseAdapter({
         url: process.env.DATABASE_URL || '',
     }),
+    onInit: async (payload) => {
+        payload.create({
+            collection: 'users',
+            data: {
+                username: 'admin',
+                password: 'admin',
+            },
+        })
+    },
     plugins: [
         nestedDocsPlugin({
             collections: ['pages'],
