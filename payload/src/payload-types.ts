@@ -70,7 +70,6 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
-    navlink: Navlink;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -81,7 +80,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
-    navlink: NavlinkSelect<false> | NavlinkSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -91,8 +89,12 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    nav: Nav;
+  };
+  globalsSelect: {
+    nav: NavSelect<false> | NavSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -220,24 +222,6 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "navlink".
- */
-export interface Navlink {
-  id: string;
-  title: string;
-  page: string | Page;
-  sublinks?:
-    | {
-        title: string;
-        page: string | Page;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -271,10 +255,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: string | Page;
-      } | null)
-    | ({
-        relationTo: 'navlink';
-        value: string | Navlink;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -419,23 +399,6 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "navlink_select".
- */
-export interface NavlinkSelect<T extends boolean = true> {
-  title?: T;
-  page?: T;
-  sublinks?:
-    | T
-    | {
-        title?: T;
-        page?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -473,6 +436,56 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nav".
+ */
+export interface Nav {
+  id: string;
+  links?:
+    | {
+        title: string;
+        page: string | Page;
+        sublinks?:
+          | {
+              title: string;
+              page: string | Page;
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nav_select".
+ */
+export interface NavSelect<T extends boolean = true> {
+  links?:
+    | T
+    | {
+        title?: T;
+        page?: T;
+        sublinks?:
+          | T
+          | {
+              title?: T;
+              page?: T;
+              url?: T;
+              id?: T;
+            };
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { Navlinks } from './collections/Navlinks'
+import { Nav } from './globals/Nav'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 
 const filename = fileURLToPath(import.meta.url)
@@ -29,9 +29,9 @@ export default buildConfig({
                       password: 'admin',
                   }
                 : false,
-        autoRefresh: true,
     },
-    collections: [Users, Media, Pages, Navlinks],
+    collections: [Users, Media, Pages],
+    globals: [Nav],
     editor: lexicalEditor(),
     secret: process.env.PAYLOAD_SECRET || '',
     typescript: {

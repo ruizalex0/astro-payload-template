@@ -1,9 +1,9 @@
 ---
 const response = await fetch(
-    'http://payload:3000/api/globals/nav?depth=1&draft=false&trash=false'
+    'http://payload:3000/api/globals/nav?depth=0&draft=false&trash=false'
 )
 const data: any = await response.json()
-const links = data.items.map((link: any) => {
+const links = data.links.map((link: any) => {
     return {
         title: link.title,
         url: link.url,
