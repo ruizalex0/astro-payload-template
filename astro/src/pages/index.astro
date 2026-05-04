@@ -28,21 +28,25 @@ const links = data.links.map((link: any) => {
     </head>
     <body>
         <h1>Astro</h1>
-        <ul>
-            {
-                links.map((link: any) => (
-                    <li>
-                        <a href={link.url}>{link.title}</a>
-                        <ul>
-                            {link.sublinks.map((sublink: any) => (
-                                <li>
-                                    <a href={sublink.url}>{sublink.title}</a>
-                                </li>
-                            ))}
-                        </ul>
-                    </li>
-                ))
-            }
-        </ul>
+        <nav>
+            <ul>
+                {
+                    links.map((link: any) => (
+                        <li>
+                            <a href={link.url}>{link.title}</a>
+                            <ul>
+                                {link.sublinks.map((sublink: any) => (
+                                    <li>
+                                        <a href={sublink.url}>
+                                            {sublink.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </li>
+                    ))
+                }
+            </ul>
+        </nav>
     </body>
 </html>

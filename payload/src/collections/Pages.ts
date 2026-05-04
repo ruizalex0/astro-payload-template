@@ -68,6 +68,7 @@ export const Pages: CollectionConfig = {
     admin: {
         useAsTitle: 'title',
     },
+    versions: true,
     fields: [
         {
             name: 'title',

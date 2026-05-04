@@ -22,13 +22,10 @@ export default buildConfig({
         importMap: {
             baseDir: path.resolve(dirname),
         },
-        autoLogin:
-            process.env.NODE_ENV === 'development'
-                ? {
-                      username: 'admin',
-                      password: 'admin',
-                  }
-                : false,
+        autoLogin: {
+            username: 'admin',
+            password: 'admin',
+        },
     },
     collections: [Users, Media, Pages],
     globals: [Nav],
@@ -49,6 +46,15 @@ export default buildConfig({
             },
         })
     },
+    endpoints: [
+        {
+            path: '/health',
+            method: 'get',
+            handler: async () => {
+                return new Response('OK', { status: 200 })
+            },
+        },
+    ],
     plugins: [
         nestedDocsPlugin({
             collections: ['pages'],

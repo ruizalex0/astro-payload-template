@@ -1,28 +1,22 @@
 ---
 import type { GetStaticPaths } from 'astro'
 
-export const prerender = !(import.meta.env.MODE === 'development')
-
-const getStaticPaths = prerender
-    ? ((async () => {
-          const response = await fetch(
-              'http://payload:3000/api/pages?depth=0&draft=false&trash=false'
-          )
-          const data = await response.json()
-          const pages = data.docs.map((page: any) => {
-              return {
-                  params: { slug: page.url },
-                  props: {
-                      title: page.title as string,
-                      content: page.content as any,
-                  },
-              }
-          })
-          return pages
-      }) satisfies GetStaticPaths)
-    : undefined
-
-export { getStaticPaths }
+export const getStaticPaths = (async () => {
+    const response = await fetch(
+        'http://payload:3000/api/pages?depth=0&draft=false&trash=false'
+    )
+    const data = await response.json()
+    const pages = data.docs.map((page: any) => {
+        return {
+            params: { slug: page.url },
+            props: {
+                title: page.title as string,
+                content: page.content as any,
+            },
+        }
+    })
+    return pages
+}) satisfies GetStaticPaths
 
 const { slug } = Astro.params
 
@@ -30,13 +24,11 @@ const url =
     'http://payload:3000/api/pages?depth=0&draft=false&trash=false' +
     '&where[url][equals]=' +
     encodeURIComponent(`/${slug}`)
+console.log(url)
 const response = await fetch(url)
 const data = await response.json()
 
-console.log(url)
-console.log(data)
-
-const title = prerender ? Astro.props['title'] : data.docs[0].title + '!!!'
+const title = Astro.props['title'] || data.docs[0].title + '!!!'
 ---
 
 <html lang="en">
